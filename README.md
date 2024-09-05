@@ -91,6 +91,197 @@ Facial Recognition: Feature extraction is key to identifying unique facial featu
 
 ![model drawio](https://github.com/user-attachments/assets/b82f5e57-a330-4d76-8d50-6b9831ecbf9c)
 
+# Implementation
+
+## Input Image
+
+This is the initial data fed into the model. For image classification, this would be a 2D image with specific dimensions (e.g., 150x150 pixels) and color channels (e.g., RGB with 3 channels).
+
+## Convolutional Layer
+
+This layer applies a set of filters to the input image to create feature maps. It detects patterns such as edges, textures, etc.
+
+`Conv2D(32, (3, 3), activation='relu')`
+
+## Activation Layer (ReLU)
+
+This introduces non-linearity into the model which helps it learn complex patterns. ReLU is a popular activation function that outputs the input directly if it is positive; otherwise, it outputs zero.
+
+The ReLU activation function is applied directly within the `Conv2D` layer by specifying `activation='relu'`.
+
+## Pooling Layer
+
+This layer reduces the spatial dimensions of the feature maps to decrease the number of parameters and computation. It helps in making the model invariant to small translations in the image.
+
+`MaxPooling2D(pool_size=(2, 2))`
+`pool_size=(2, 2)` specifies the size of the pooling window (2x2 in this case).
+
+## Flattening Layer
+
+This layer flattens the 2D feature maps into a 1D vector. This is necessary before passing the data to fully connected (dense) layers.
+
+`Flatten()`
+
+## Fully Connected Layer
+
+These layers are dense layers that connect every neuron from the previous layer to every neuron in the current layer. They are used to learn complex representations and patterns.
+
+`Dense(512, activation='relu')`
+
+`512` specifies the number of neurons in this layer.
+
+`activation='relu'` applies the ReLU activation function.
+
+## Output Layer (Softmax)
+
+This layer outputs the probability distribution over classes. Softmax activation converts the raw scores into probabilities.
+
+`Dense(len(train_generator.class_indices), activation='softmax')`
+
+`len(train_generator.class_indices)` determines the number of output classes
+
+`activation='softmax'` converts logits into probabilities.
+
+## Predicted Class
+
+This is the final class prediction made by the model after training.
+
+#Full Code
+
+import tensorflow as tf
+`from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Input
+import os`
+
+# Set dataset paths (adjust these paths to your local setup)
+`train_dir = r'C:\Users\asus\CNN\MY_data\train'
+test_dir = r'C:\Users\asus\CNN\MY_data\test'`
+
+# Verify number of images
+`def count_images_in_directory(directory):
+    class_counts = {}
+    for subdir in os.listdir(directory):
+        subdir_path = os.path.join(directory, subdir)
+        if os.path.isdir(subdir_path):
+            class_counts[subdir] = len(os.listdir(subdir_path))
+    return class_counts`
+
+`train_counts = count_images_in_directory(train_dir)
+test_counts = count_images_in_directory(test_dir)`
+
+`print(f'Train directory counts: {train_counts}')
+print(f'Test directory counts: {test_counts}')`
+
+# Set up data augmentation and normalization
+`train_datagen = ImageDataGenerator(rescale=1./255)
+test_datagen = ImageDataGenerator(rescale=1./255)`
+
+# Create data generators
+`train_generator = train_datagen.flow_from_directory(
+    train_dir,
+    target_size=(150, 150),
+    batch_size=32,
+    class_mode='categorical',
+    shuffle=True  # Shuffle to ensure diversity in batches
+)
+
+test_generator = test_datagen.flow_from_directory(
+    test_dir,
+    target_size=(150, 150),
+    batch_size=32,
+    class_mode='categorical',
+    shuffle=False  # No shuffle for test data
+)`
+
+# Build the CNN model
+`model = Sequential([
+    Input(shape=(150, 150, 3)),
+    Conv2D(32, (3, 3), activation='relu'),
+    MaxPooling2D(2, 2),`
+
+    Conv2D(64, (3, 3), activation='relu'),
+    MaxPooling2D(2, 2),
+
+    Conv2D(128, (3, 3), activation='relu'),
+    MaxPooling2D(2, 2),
+
+    Flatten(),
+    Dense(512, activation='relu'),
+    Dropout(0.5),
+    Dense(len(train_generator.class_indices), activation='softmax')  # Number of classes dynamically
+`])`
+
+# Compile the model
+`model.compile(
+    loss='categorical_crossentropy',
+    optimizer='adam',
+    metrics=['accuracy']
+)`
+
+# Train the model
+`history = model.fit(
+    train_generator,
+    steps_per_epoch=train_generator.samples // train_generator.batch_size,
+    epochs=10,
+    validation_data=test_generator,
+    validation_steps=test_generator.samples // test_generator.batch_size
+)`
+
+# Evaluate the model
+`test_loss, test_acc = model.evaluate(test_generator)
+print(f'Test accuracy: {test_acc}')`
+
+# Save the model
+`model.save(r'C:\Users\asus\CNN\Classifier.h5')`
+
+# Predicting
+
+`import matplotlib.pyplot as plt
+import numpy as np
+from tensorflow.keras.preprocessing.image import load_img, img_to_array
+from tensorflow.keras.models import load_model`
+
+# Load the trained model
+`model = load_model(r'C:\Users\asus\CNN\Classifier.h5')`
+
+# Function to prepare an image for prediction
+`def prepare_image(image_path, target_size=(150, 150)):
+    # Load the image
+    img = load_img(image_path, target_size=target_size)`
+    
+    # Display the image
+    plt.imshow(img)
+    plt.axis('off')  # Hide axes for cleaner display
+    plt.show()
+
+    # Convert the image to array
+    img_array = img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
+    img_array = img_array / 255.0  # Normalize the image
+    return img_array
+
+# Prepare an image for prediction and display it
+`img_array = prepare_image(r'C:\Users\asus\CNN\prots.jpg')`
+
+# Predict the class
+`predictions = model.predict(img_array)
+predicted_class = np.argmax(predictions, axis=1)`
+
+# Assuming you have access to `train_generator` for class names
+`class_names = list(train_generator.class_indices.keys())  # Ensure train_generator is defined earlier
+print(f'Predicted class: {class_names[predicted_class[0]]}')`
+
+#Example Output
+
+![image](https://github.com/user-attachments/assets/9f98361f-1590-47b8-9b5e-d6fbab28f8f1)
+
+
+
+
+
+
+
 
 
 
