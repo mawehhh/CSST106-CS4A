@@ -27,12 +27,10 @@ In complex scenes with multiple small or overlapping objects (like pedestrians i
 ![image1](https://github.com/user-attachments/assets/34f0d9f4-47af-40e5-9f20-54af66681f9b)
 
 ### Image 2: Dog and Bicycle Scene
-![Dog and Bicycle Scene](![image](https://github.com/user-attachments/assets/c22714e5-2c6f-4384-b0d9-c7b5e4fdc43c)
-)
+![image2](https://github.com/user-attachments/assets/47000e37-3312-487b-82d5-e09a8320d406)
 
 ### Image 3: Car with Bicycle
-![Car with Bicycle](![image](https://github.com/user-attachments/assets/51a85942-856a-4703-82c6-db58460f04f0)
-)
+![image3](https://github.com/user-attachments/assets/39749051-169a-46ce-94ef-b882965b715a)
 
 ---
 
