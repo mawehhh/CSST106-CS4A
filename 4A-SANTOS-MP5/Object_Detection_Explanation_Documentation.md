@@ -3,7 +3,8 @@
 This document provides an analysis of object detection results on various images. Each image displays detected objects using bounding boxes and labels with confidence scores. The model likely used for detection is YOLO (You Only Look Once) or SSD (Single Shot Multibox Detector), which are known for their real-time object detection capabilities.
 
 ## 1. Image 1: Urban Street Scene
-![Image 1](sandbox:/mnt/data/image.png)
+![Image 1](![Uploading image.png…]()
+)
 
 **Description**:
 - The scene is a busy urban street with various objects, such as people, cars, buses, and trucks.
