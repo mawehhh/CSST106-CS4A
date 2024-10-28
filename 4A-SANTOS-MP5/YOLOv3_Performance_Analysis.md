@@ -24,13 +24,16 @@ In complex scenes with multiple small or overlapping objects (like pedestrians i
 ## Sample Output Images
 
 ### Image 1: Crowded Street Scene
-![Crowded Street Scene](image1.png)
+![Crowded Street Scene](![image](https://github.com/user-attachments/assets/45a85141-a8e1-4ca4-9550-409224ea82b6)
+)
 
 ### Image 2: Dog and Bicycle Scene
-![Dog and Bicycle Scene](image2.png)
+![Dog and Bicycle Scene](![image](https://github.com/user-attachments/assets/c22714e5-2c6f-4384-b0d9-c7b5e4fdc43c)
+)
 
 ### Image 3: Car with Bicycle
-![Car with Bicycle](image3.png)
+![Car with Bicycle](![image](https://github.com/user-attachments/assets/51a85942-856a-4703-82c6-db58460f04f0)
+)
 
 ---
 
