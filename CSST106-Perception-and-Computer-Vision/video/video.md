@@ -1,2 +1,1 @@
-
-[![asciicast]]([https://asciinema.org/a/113463](https://youtu.be/6qZ9uNZLJ6w))
+https://www.youtube.com/watch?v=<6qZ9uNZLJ6w>
